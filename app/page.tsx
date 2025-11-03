@@ -1,12 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import DatePicker from 'react-datepicker'
 import { addDays } from 'date-fns'
-import { nl } from 'date-fns/locale'
 import Link from 'next/link'
-import 'react-datepicker/dist/react-datepicker.css'
-import './datepicker.css'
 import styles from './page.module.css'
 import { isDateAvailable, getAvailableTimes } from './availability'
 import CustomCalendar from './components/CustomCalendar'
@@ -15,7 +11,6 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [showCookieBanner, setShowCookieBanner] = useState(true)
-  const [isMobile, setIsMobile] = useState(false)
   const [deliveryMethod, setDeliveryMethod] = useState<'pickup' | 'location'>('pickup')
   const [items, setItems] = useState<{[key: string]: number}>({
     'keukenmessen': 0,
@@ -54,16 +49,6 @@ export default function Home() {
     if (consent) {
       setShowCookieBanner(false)
     }
-  }, [])
-
-  // Detect mobile device
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
   const scrollToSection = (id: string) => {
@@ -411,33 +396,11 @@ export default function Home() {
                 {/* Datum */}
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-800">Gewenste Datum *</label>
-                  {isMobile ? (
-                    <div className="relative">
-                      <DatePicker
-                        selected={selectedDate}
-                        onChange={(date) => setSelectedDate(date)}
-                        filterDate={isDateAvailable}
-                        minDate={addDays(new Date(), 1)}
-                        locale={nl}
-                        dateFormat="EEEE d MMMM yyyy"
-                        placeholderText="Selecteer datum"
-                        className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 cursor-pointer"
-                        calendarClassName="custom-calendar"
-                        required
-                      />
-                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                      </div>
-                    </div>
-                  ) : (
-                    <CustomCalendar
-                      selectedDate={selectedDate}
-                      onChange={setSelectedDate}
-                      minDate={addDays(new Date(), 1)}
-                    />
-                  )}
+                  <CustomCalendar
+                    selectedDate={selectedDate}
+                    onChange={setSelectedDate}
+                    minDate={addDays(new Date(), 1)}
+                  />
                 </div>
 
                 {/* Tijd */}

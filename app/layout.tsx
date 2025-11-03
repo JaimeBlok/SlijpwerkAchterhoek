@@ -4,6 +4,20 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Slijpwerk Achterhoek | Professionele Slijpservice',
   description: 'Uw slijpservice in de buurt. Professioneel slijpen van messen, scharen en tuingereedschap.',
+  icons: {
+    icon: '/favoriet.png',
+  },
+  openGraph: {
+    title: 'Slijpwerk Achterhoek | Professionele Slijpservice',
+    description: 'Uw slijpservice in de buurt. Professioneel slijpen van messen, scharen en tuingereedschap.',
+    images: ['/Tweede.png'],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Slijpwerk Achterhoek | Professionele Slijpservice',
+    description: 'Uw slijpservice in de buurt. Professioneel slijpen van messen, scharen en tuingereedschap.',
+    images: ['/Tweede.png'],
+  },
 }
 
 export const viewport: Viewport = {
