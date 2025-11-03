@@ -82,6 +82,18 @@ export default function OverPage() {
       {/* Het Verhaal Section */}
       <section id="verhaal" className="py-20" style={{backgroundColor: '#FFFEF6'}}>
         <div className="max-w-7xl mx-auto px-6">
+          {/* Title - shown on mobile */}
+          <div className="mb-8 md:hidden">
+            <div className="space-y-2">
+              <p className="uppercase text-sm tracking-wider mb-2" style={{color: '#223723'}}>
+                Over ons
+              </p>
+              <h2 className="font-bold text-4xl" style={{color: '#223723'}}>
+                Het verhaal achter Slijpwerk Achterhoek
+              </h2>
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-2 md:items-center md:gap-12 xl:gap-32">
             {/* Image */}
             <div className="mx-auto">
@@ -94,7 +106,8 @@ export default function OverPage() {
 
             {/* Content */}
             <div className="mt-5 sm:mt-10 lg:mt-0">
-              <div className="space-y-2 md:space-y-4">
+              {/* Title - shown on desktop */}
+              <div className="space-y-2 md:space-y-4 hidden md:block">
                 <p className="uppercase text-sm tracking-wider mb-2" style={{color: '#223723'}}>
                   Over ons
                 </p>
