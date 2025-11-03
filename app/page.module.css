@@ -616,21 +616,21 @@
   }
 
   .announcementBanner {
-    padding: 0.15rem 0.75rem;
+    padding: 0.3rem 0.75rem;
     font-size: 0.65rem;
   }
 
   .logoContainer {
-    padding: 6px 0 !important;
+    padding: 8px 0 !important;
   }
 
   .logoImage {
-    height: 22px !important;
+    height: 30px !important;
   }
 
   .hero {
-    height: calc(100vh - 50px);
-    min-height: calc(100vh - 50px);
+    height: calc(100vh - 65px);
+    min-height: calc(100vh - 65px);
   }
 
   .heroContent h1 {
