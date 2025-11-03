@@ -616,35 +616,35 @@
   }
 
   .announcementBanner {
-    padding: 0.25rem 0.75rem;
+    padding: 0.2rem 0.75rem;
     font-size: 0.7rem;
   }
 
   .logoContainer {
-    padding: 10px 0 !important;
+    padding: 8px 0 !important;
   }
 
   .logoImage {
-    height: 28px !important;
+    height: 25px !important;
   }
 
   .hero {
-    height: calc(100vh - 80px);
-    min-height: calc(100vh - 80px);
+    height: calc(100vh - 60px);
+    min-height: calc(100vh - 60px);
   }
 
   .heroContent h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    margin-bottom: 1rem;
   }
 
   .heroOverlay {
-    padding-bottom: 2rem !important;
+    padding-bottom: 1.5rem !important;
   }
 
   .ctaButton {
-    padding: 0.75rem 2rem;
-    font-size: 0.75rem;
+    padding: 0.65rem 1.5rem;
+    font-size: 0.7rem;
   }
 
   .aboutContent h2,
