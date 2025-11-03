@@ -619,9 +619,13 @@
     height: 500px;
   }
 
+  .hero::after {
+    filter: blur(5px);
+  }
+
   .heroContent h1 {
-    font-size: 3.5rem;
-    margin-bottom: 2rem;
+    font-size: 3.2rem;
+    margin-bottom: 1.5rem;
   }
 
   .heroOverlay {
