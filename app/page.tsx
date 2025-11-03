@@ -290,7 +290,7 @@ export default function Home() {
                   <input 
                     type="text" 
                     id="name" 
-                    className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500" 
+                    className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-base focus:border-primary-500 focus:ring-primary-500" 
                     placeholder="Uw naam" 
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -304,7 +304,7 @@ export default function Home() {
                   <input 
                     type="email" 
                     id="email" 
-                    className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500" 
+                    className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-base focus:border-primary-500 focus:ring-primary-500" 
                     placeholder="uw@email.nl" 
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -318,7 +318,7 @@ export default function Home() {
                   <input 
                     type="tel" 
                     id="phone" 
-                    className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500" 
+                    className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-base focus:border-primary-500 focus:ring-primary-500" 
                     placeholder="06 12 34 56 78" 
                     value={formData.phone}
                     onChange={(e) => setFormData({...formData, phone: e.target.value})}
@@ -407,7 +407,7 @@ export default function Home() {
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-800">Gewenste Tijd *</label>
                   <select
-                    className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 h-[46px]"
+                    className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-base focus:border-primary-500 focus:ring-primary-500 h-[46px]"
                     value={selectedDate ? selectedDate.getHours() : 9}
                     onChange={(e) => {
                       const hour = parseInt(e.target.value)
