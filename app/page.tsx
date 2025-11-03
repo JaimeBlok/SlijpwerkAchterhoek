@@ -9,12 +9,13 @@ import 'react-datepicker/dist/react-datepicker.css'
 import './datepicker.css'
 import styles from './page.module.css'
 import { isDateAvailable, getAvailableTimes } from './availability'
+import CustomCalendar from './components/CustomCalendar'
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [calendarOpen, setCalendarOpen] = useState(true)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [showCookieBanner, setShowCookieBanner] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
   const [deliveryMethod, setDeliveryMethod] = useState<'pickup' | 'location'>('pickup')
   const [items, setItems] = useState<{[key: string]: number}>({
     'keukenmessen': 0,
@@ -53,6 +54,16 @@ export default function Home() {
     if (consent) {
       setShowCookieBanner(false)
     }
+  }, [])
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
   const scrollToSection = (id: string) => {
@@ -276,7 +287,7 @@ export default function Home() {
           {/* Appointment Form */}
           {!formSubmitted && (
           <form 
-            className="max-w-4xl mx-auto space-y-6"
+            className="max-w-4xl mx-auto px-4"
             onSubmit={async (e) => {
               e.preventDefault()
               setIsLoading(true)
@@ -285,150 +296,190 @@ export default function Home() {
               setFormSubmitted(true)
             }}
           >
-            {/* Row 1: Naam + Telefoon */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2 text-gray-800">Naam *</label>
-                <input 
-                  type="text" 
-                  id="name" 
-                  className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500" 
-                  placeholder="Uw naam" 
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  required 
-                />
-              </div>
-
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium mb-2 text-gray-800">Telefoon *</label>
-                <input 
-                  type="tel" 
-                  id="phone" 
-                  className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500" 
-                  placeholder="06 12 34 56 78" 
-                  value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  required 
-                />
-              </div>
-            </div>
-
-            {/* Row 2: Email + Datum */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2 text-gray-800">Email *</label>
-                <input 
-                  type="email" 
-                  id="email" 
-                  className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500" 
-                  placeholder="uw@email.nl" 
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  required 
-                />
-              </div>
-
-              <div>
-                <label htmlFor="date" className="block text-sm font-medium mb-2 text-gray-800">Gewenste Datum & Tijd *</label>
-                <div className="relative">
-                  <DatePicker
-                    selected={selectedDate}
-                    onChange={(date) => setSelectedDate(date)}
-                    open={calendarOpen}
-                    onInputClick={() => setCalendarOpen(true)}
-                    onClickOutside={() => setCalendarOpen(false)}
-                    showTimeSelect
-                    timeIntervals={60}
-                    filterDate={isDateAvailable}
-                    filterTime={filterPassedTime}
-                    minDate={addDays(new Date(), 1)}
-                    locale={nl}
-                    dateFormat="EEEE d MMMM yyyy - HH:mm"
-                    timeCaption="Tijd"
-                    placeholderText="Klik om datum en tijd te kiezen"
-                    className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 cursor-pointer"
-                    calendarClassName="custom-calendar"
-                    required
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Left Column */}
+              <div className="space-y-4">
+                {/* Naam */}
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium mb-2 text-gray-800">Naam *</label>
+                  <input 
+                    type="text" 
+                    id="name" 
+                    className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500" 
+                    placeholder="Uw naam" 
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    required 
                   />
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium mb-2 text-gray-800">Email *</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500" 
+                    placeholder="uw@email.nl" 
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    required 
+                  />
+                </div>
+
+                {/* Telefoon */}
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium mb-2 text-gray-800">Telefoon *</label>
+                  <input 
+                    type="tel" 
+                    id="phone" 
+                    className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500" 
+                    placeholder="06 12 34 56 78" 
+                    value={formData.phone}
+                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    required 
+                  />
+                </div>
+
+                {/* Aantal Keukenmessen */}
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-gray-800">Aantal Keukenmessen *</label>
+                  <div className="py-3 px-4 bg-white border border-gray-300 rounded-lg flex items-center justify-between h-[46px]">
+                    <span className="text-sm text-gray-800">Keukenmessen</span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => updateItemCount('keukenmessen', -1)}
+                        className="inline-flex flex-shrink-0 justify-center items-center size-7 rounded-full border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
+                        disabled={items.keukenmessen === 0}
+                      >
+                        <svg className="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M5 12h14"/>
+                        </svg>
+                      </button>
+                      <span className="text-sm font-medium text-gray-900 min-w-[2rem] text-center">
+                        {items.keukenmessen}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => updateItemCount('keukenmessen', 1)}
+                        className="inline-flex flex-shrink-0 justify-center items-center size-7 rounded-full border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                      >
+                        <svg className="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M5 12h14"/>
+                          <path d="M12 5v14"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Aflevermethode */}
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-gray-800">Wij leveren uw messen op *</label>
+                  <div className="py-2.5 px-3 bg-white border border-gray-300 rounded-lg flex items-center gap-2 h-[46px]">
+                    <button
+                      type="button"
+                      onClick={() => setDeliveryMethod('pickup')}
+                      className={`flex-1 flex items-center justify-between py-1.5 px-3 rounded-md text-sm font-medium transition-colors ${
+                        deliveryMethod === 'pickup'
+                          ? 'bg-[#17320B] text-white'
+                          : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <span className="text-xs">Langsbrengen</span>
+                      <span className="font-semibold text-xs">€0,-</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeliveryMethod('location')}
+                      className={`flex-1 flex items-center justify-between py-1.5 px-3 rounded-md text-sm font-medium transition-colors ${
+                        deliveryMethod === 'location'
+                          ? 'bg-[#17320B] text-white'
+                          : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <span className="text-xs">Op locatie</span>
+                      <span className="font-semibold text-xs">+€10,-</span>
+                    </button>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Row 3: Keukenmessen + Aflevermethode */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Keukenmessen Counter */}
-              <div>
-                <label className="block text-sm font-medium mb-2 text-gray-800">Aantal Keukenmessen *</label>
-                <div className="p-3 bg-white border border-gray-200 rounded-lg flex items-center justify-between h-[60px]">
-                  <span className="text-sm font-semibold text-gray-800">Keukenmessen</span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => updateItemCount('keukenmessen', -1)}
-                      className="inline-flex flex-shrink-0 justify-center items-center size-8 rounded-full border border-gray-200 bg-white text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50"
-                      disabled={items.keukenmessen === 0}
-                    >
-                      <svg className="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14"/>
-                      </svg>
-                    </button>
-                    <span className="text-base font-bold text-gray-900 min-w-[2rem] text-center">
-                      {items.keukenmessen}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => updateItemCount('keukenmessen', 1)}
-                      className="inline-flex flex-shrink-0 justify-center items-center size-8 rounded-full border border-gray-200 bg-white text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
-                    >
-                      <svg className="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14"/>
-                        <path d="M12 5v14"/>
-                      </svg>
-                    </button>
-                  </div>
+              {/* Right Column */}
+              <div className="space-y-4">
+                {/* Datum */}
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-gray-800">Gewenste Datum *</label>
+                  {isMobile ? (
+                    <div className="relative">
+                      <DatePicker
+                        selected={selectedDate}
+                        onChange={(date) => setSelectedDate(date)}
+                        filterDate={isDateAvailable}
+                        minDate={addDays(new Date(), 1)}
+                        locale={nl}
+                        dateFormat="EEEE d MMMM yyyy"
+                        placeholderText="Selecteer datum"
+                        className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 cursor-pointer"
+                        calendarClassName="custom-calendar"
+                        required
+                      />
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                    </div>
+                  ) : (
+                    <CustomCalendar
+                      selectedDate={selectedDate}
+                      onChange={setSelectedDate}
+                      minDate={addDays(new Date(), 1)}
+                    />
+                  )}
                 </div>
-              </div>
 
-              {/* Aflevermethode */}
-              <div>
-                <label className="block text-sm font-medium mb-2 text-gray-800">Wij leveren uw messen op *</label>
-                <div className="p-3 bg-white border border-gray-200 rounded-lg flex items-center gap-3 h-[60px]">
-                  <button
-                    type="button"
-                    onClick={() => setDeliveryMethod('pickup')}
-                    className={`flex-1 flex items-center justify-between py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
-                      deliveryMethod === 'pickup'
-                        ? 'bg-primary-500 text-white'
-                        : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-                    }`}
+                {/* Tijd */}
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-gray-800">Gewenste Tijd *</label>
+                  <select
+                    className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 h-[46px]"
+                    value={selectedDate ? selectedDate.getHours() : 9}
+                    onChange={(e) => {
+                      const hour = parseInt(e.target.value)
+                      if (selectedDate) {
+                        const newDate = new Date(selectedDate)
+                        newDate.setHours(hour, 0, 0, 0)
+                        setSelectedDate(newDate)
+                      } else {
+                        const newDate = new Date()
+                        newDate.setHours(hour, 0, 0, 0)
+                        setSelectedDate(newDate)
+                      }
+                    }}
+                    required
                   >
-                    <span className="text-sm">Langsbrengen</span>
-                    <span className="font-bold text-sm">€0,-</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setDeliveryMethod('location')}
-                    className={`flex-1 flex items-center justify-between py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
-                      deliveryMethod === 'location'
-                        ? 'bg-primary-500 text-white'
-                        : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    <span className="text-sm">Op locatie</span>
-                    <span className="font-bold text-sm">+€10,-</span>
-                  </button>
+                    {selectedDate && getAvailableTimes(selectedDate).length > 0 ? (
+                      getAvailableTimes(selectedDate).map((hour) => (
+                        <option key={hour} value={hour}>
+                          {String(hour).padStart(2, '0')}:00
+                        </option>
+                      ))
+                    ) : (
+                      Array.from({ length: 9 }, (_, i) => i + 9).map((hour) => (
+                        <option key={hour} value={hour}>
+                          {String(hour).padStart(2, '0')}:00
+                        </option>
+                      ))
+                    )}
+                  </select>
                 </div>
               </div>
             </div>
 
             {/* Order Summary */}
-            <div className="p-4 bg-white border border-gray-200 rounded-lg">
+            <div className="p-4 bg-white border border-gray-200 rounded-lg mt-6">
                 <div className="space-y-2">
                   {items.keukenmessen > 0 && (
                     <div className="flex justify-between text-sm">
@@ -467,13 +518,15 @@ export default function Home() {
             </div>
 
             {/* Submit Button */}
-            <button 
-              type="submit" 
-              className={isFormValid() ? styles.submitButtonValid : styles.submitButton}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Laden...' : 'Afspraak Maken'}
-            </button>
+            <div className="flex justify-center">
+              <button 
+                type="submit" 
+                className={`${isFormValid() ? styles.submitButtonValid : styles.submitButton} mt-6 w-full max-w-md`}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Laden...' : 'Afspraak Maken'}
+              </button>
+            </div>
           </form>
           )}
 
